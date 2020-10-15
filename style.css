@@ -51,14 +51,14 @@ ul{
 .weather-here-main{
     display: flex;
     justify-content: space-around;
-}
+}/*
 .weather-here-icon{
     width: 130px;
     height: 130px;
-}
+}*//*
 .weather-here-temperature{
     font-size: 80pt;
-}
+}*/
 .weather-here-extra-data{
     width: calc(1/2 * 100% - (1 - 1/2) * 8%);
 }
@@ -120,11 +120,11 @@ ul{
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+}/*
 .favorites-icon-weather{
     width: 60px;
     height: 60px;
-}
+}*/
 .favorites-icon-delete{
     width: 50px;
     height: 50px;
@@ -138,6 +138,11 @@ ul{
     cursor: pointer;
     padding: 0;
 }
+
+.city-name{
+
+}
+
 @media only screen and (max-width: 1300px) and (min-width: 1001px) {
     .weather-here-update-button{
         margin-left: 18%;   
@@ -158,22 +163,22 @@ ul{
     }
     .weather-here-update-button{
         margin-left: 10%;   
-    }
+    }/*
     .weather-here-icon{
         width: 100px;
         height: 100px;
-    }
+    }*//*
     .weather-here-temperature{
         font-size: 60pt;
-    }
+    }*/
     .add-city-icon{
         width: 40px;
         height: 40px;
-    }
+    }/*
     .favorites-icon-weather{
         width: 40px;
         height: 40px;
-    }
+    }*/
     .favorites-icon-delete{
         width: 40px;
         height: 40px;
