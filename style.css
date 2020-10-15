@@ -138,10 +138,10 @@ ul{
     cursor: pointer;
     padding: 0;
 }
-
+/*
 .city-name{
 
-}
+}*/
 
 @media only screen and (max-width: 1300px) and (min-width: 1001px) {
     .weather-here-update-button{

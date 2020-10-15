@@ -3,18 +3,20 @@ class WeatherAPI{
         this.apiKey = 'f0b947c783873ab1a7c905ad26e85162'
     }
 
-    getByCityName(cityName){
-        let responce = fetch(`api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${this.apiKey}`)
-        return responce
+    async getByCityName(cityName){
+        const responce = await fetch(`api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${this.apiKey}`)
+        return await responce.json()
     }
     
-    getByCityCoordinates(coordinates){
-        //let [lat, lon] = [coordinates., coordinates.]
-        let responce = fetch(`api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}`)
-        return responce
+    async getByCityCoordinates(coordinates){
+        const [lat, lon] = [coordinates.coords.latitude, coordinates.coords.longitude]
+        const responce = await fetch(`api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}`)
+        return await responce.json()
     }
 
-    
+    getIconURL(iconCode) {
+        return `//openweathermap.org/img/wn/${iconCode}@2x.png`
+    }
 }
 
 
