@@ -1,4 +1,4 @@
-const WeatherAPI = new WeatherAPI()
+const weatherAPI = new WeatherAPI()
 
 const weatherHere = document.querySelector('.weather-here')
 const weatherCity = document.querySelector('.weather-city-list')
