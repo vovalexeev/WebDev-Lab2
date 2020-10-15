@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Web_lab2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="js/weatherAPI.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+    <title>Weather</title>
+</head>
+<body>
+    <main>
+        <section class="weather-here-header">
+            <h1 class="main-title">Weather here</h1>
+            <button class="weather-here-update-button" type="button">Update geolocation</button>
+            <button class="update-media"><img class="weather-here-update-img" src="img/update-geolocation.png" alt="Update-geolocation"></button>
+        </section> 
+        <section class="favorites-header">
+            <h2 class="main-title">Favorites</h2>
+            <form class="add-city-form">
+                <input onclick="" id="add-city-input" class="add-city-input" required type="text" placeholder="Add a new city">
+                <button class="add-button"><img class="add-city-icon" src="img/plus.png" alt="Add city"></button>
+            </form>
+        </section>
+        <ul class="weather-item-list"></ul>
+    </main>
+    
+    <template id="weather-here">
+        <section class="weather-here">
+            <section class="weather-here-city">
+                <h2>Saint Petersburg</h2>
+                <section class="weather-here-main">
+                    <img class="weather-here-icon" src="img/cloud.png" alt="SPb-icon">
+                    <div class="weather-here-temperature">8°C</div>
+                </section>
+            </section>
+            <ul class="weather-here-extra-data">
+                <li class="extra-parameter">
+                    <span class="name-parameter">Wind</span>
+                    <span></span>
+                </li>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Cloud cover</span>
+                    <span></span>
+                </li>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Atmospheric pressure</span>
+                    <span></span>
+                </li>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Humidity</span>
+                    <span></span>
+                </li>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Coordinates</span>
+                    <span></span>
+                </li>
+            </ul>
+        </section>
+    </template>
+
+    <template id="weather-here-waiting">
+        <div class="waiting">
+            <h1>Wait, data is loading...</h1>
+            <img src="" alt="">
+        </div>
+    </template>
+
+    <template id="weather-city">
+        <section class="favorites-city">
+            <section class="favorites-main">
+                <h3></h3>
+                <div class="temperature"></div>
+                <img class="favorites-icon-weather" src="" alt="">
+                <button class="delete-button"><img class="favorites-icon-delete" src="" alt="Delete city"></button>
+            </section>
+            <ul>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Wind</span>
+                    <span></span>
+                </li>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Cloud cover</span>
+                    <span></span>
+                </li>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Atmospheric pressure</span>
+                    <span></span>
+                </li>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Humidity</span>
+                    <span></span>
+                </li>
+                <li class="extra-parameter">
+                    <span class="name-parameter">Coordinates</span>
+                    <span></span>
+                </li>
+            </ul>
+        </section>
+    </template>
+
+    <template id="weather-city-waiting">
+        <section class="favorites-main">
+            <h3></h3>
+            <button class="delete-button"><img class="favorites-icon-delete" src="" alt="Delete city"></button>
+        </section>
+        <div class="weather-details">
+            <div class="waiting">
+                <h2>Wait, data is loading...</h2>
+                <img src="" alt="">
+            </div>
+        </div>
+    </template>
+<script src="scripts/main.js"></script>
+</body>
+</html>
+    
