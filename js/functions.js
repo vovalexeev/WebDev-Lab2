@@ -1,9 +1,9 @@
-function weatherHereWaiting (){
+const weatherHereWaiting = () => {
     const weatherHereWaitingTemplate = document.querySelector('template#weather-here-waiting')
     return document.importNode(weatherHereWaitingTemplate.content, true)
 }
 
-function weatherCityWaiting (cityName) {
+const weatherCityWaiting = (cityName) => {
     const weatherCityWaitingTemplate = document.querySelector('template#weather-city-waiting')
     const newWeatherCityWaiting = document.importNode(weatherCityWaitingTemplate.content, true)
     newWeatherCityWaiting.querySelector('.city-name').innerText = cityName
@@ -11,14 +11,14 @@ function weatherCityWaiting (cityName) {
     return newWeatherCityWaiting
 }
 
-function weatherHereFunc (weather) {
+const weatherHereFunc = (weather) => {
     const weatherHereTemplate = document.querySelector('template#weather-here')
     const newWeatherHere = document.importNode(weatherHereTemplate.content, true)
     setWeatherParameters(newWeatherHere, weather)
     return newWeatherHere
 }
 
-function weatherCityFunc (weather) {
+const weatherCityFunc = (weather) => {
     const weatherCityTemplate = document.querySelector('template#weather-city')
     const newWeatherCity = document.importNode(weatherCityTemplate.content, true)
     setWeatherParameters(newWeatherCity, weather)
@@ -42,20 +42,20 @@ function updateWeatherHere () {
         positionError => console.log(positionError.message))
 }
 
-function setWeatherParameters (element, weatherObject) {
+const setWeatherParameters = (element, weatherObject) => {
     const {name, icon, temperature, wind, cloud, pressure, humidity, coordinates} = getWeatherParameters(element)
     name.innerHTML = weatherObject.name
-    icon.src = weatherAPI.getIconURL(weatherObject.weather.icon)
-    temperature.innerHTML = `${weatherObject.main.temp}°C`
+    icon.src = weatherAPI.getIconURL(weatherObject.weather[0].icon)
+    temperature.innerHTML = `${Math.round(weatherObject.main.temp)}°C`
     wind.innerHTML = `${weatherObject.wind.speed} m/s`
     cloud.innerHTML = `${weatherObject.clouds.all}%`
     pressure.innerHTML = `${weatherObject.main.pressure} hpa`
     humidity.innerHTML = `${weatherObject.main.humidity}%`
-    coordinates.innerHTML = `[${weatherObject.coord.lon}, ${weatherObject.coord.lat}]`
+    coordinates.innerHTML = `[${weatherObject.coord.lat.toFixed(2)}, ${weatherObject.coord.lon.toFixed(2)}]`
     return element
 };
 
-function getWeatherParameters (weatherCity) {
+const getWeatherParameters = weatherCity => {
     return {
         name: weatherCity.querySelector('.city-name'),
         icon: weatherCity.querySelector('.icon-weather'),
@@ -68,18 +68,18 @@ function getWeatherParameters (weatherCity) {
     }
 }
 
-function removeFromFavorites (evt) {
+const removeFromFavorites = evt => {
     const thisCityName = evt.currentTarget.parentElement.firstElementChild.innerHTML
     const favoritesList = JSON.parse(localStorage.getItem('favoritesList'))
     localStorage.setItem('favoritesList', JSON.stringify(favoritesList.filter(cityName => cityName !== thisCityName)))
     updateWeatherFavorites()
 }
 
-function addToFavorites (evt) {
+const addToFavorites = async evt => {
     evt.preventDefault()
     const searchInput = document.getElementById('add-city-input')
     const cityName = searchInput.value.trim()
-    const response = weatherAPI.getByCityName(cityName)
+    const response = await weatherAPI.getByCityName(cityName)
     if (response.cod === 200) {
         const favoritesList = JSON.parse(localStorage.getItem('favoritesList'))
         localStorage.setItem('favoritesList', JSON.stringify([cityName, ...favoritesList]))
@@ -89,25 +89,26 @@ function addToFavorites (evt) {
     searchInput.value = ''
 }
 
-function updateWeatherFavorites () {
+const updateWeatherFavorites = () => {
     const favoritesList = JSON.parse(localStorage.getItem('favoritesList'))
-    let citiesToAdd = [], citiesElemToRemove = []
+    let citiesToAdd = [], citiesElementToRemove = []
     for (const i in favoritesList) {
         const cityName = favoritesList[i]
-        if (!weatherCity.querySelector(`.weather-city[key=${cityName}]`))
+        if (!weatherCity.querySelector(`.weather-city[cityName=${cityName}]`))
             citiesToAdd.push(cityName)
     }
-    for (const cityElem of weatherCity.children) {
-        const currentCityName = cityElem.querySelector('.city-name').innerText
-        if (!(favoritesList.includes(currentCityName)))
-            citiesElemToRemove.push(cityElem)
+    for (const cityElement of weatherCity.children) {
+        const thisCityName = cityElement.querySelector('.city-name').innerText
+        if (!(favoritesList.includes(thisCityName)))
+            citiesElementToRemove.push(cityElement)
     }
-    citiesElemToRemove.forEach(cityElemToRemove => weatherCity.removeChild(cityElemToRemove))
+    citiesElementToRemove.forEach(cityElementToRemove => weatherCity.removeChild(cityElementToRemove))
     citiesToAdd.forEach(cityToAdd => {
         weatherCity.append(weatherCityWaiting(cityToAdd))
-        const newCityElement = weatherCity.querySelector(`.weather-city[key=${cityToAdd}]`)
+        const newCityElement = weatherCity.querySelector(`.weather-city[cityName=${cityToAdd}]`)
         weatherAPI.getByCityName(cityToAdd)
-            .then(weather => weatherCity.replaceChild(weatherCityFunc(weather), newCityElement))
+            .then(weather => 
+                weatherCity.replaceChild(weatherCityFunc(weather), newCityElement))
             .catch(() => alert('Something went wrong... Please refresh the page'))
     })
 };

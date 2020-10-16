@@ -8,7 +8,12 @@ if (!localStorage.getItem('favoritesList'))
 updateWeatherHere()
 updateWeatherFavorites()
 
-const updateButton = document.querySelector('.weather-here-update-button weather-here-update-img')
-updateButton.addEventListener('click', updateWeatherHere)
+const updateButton = document.querySelectorAll('.weather-here-update-button, .update-media')
+for(let i = 0; i < updateButton.length; i++){ 
+    if (updateButton){
+        updateButton[i].addEventListener('click', updateWeatherHere)
+    }
+}	
 const addCityButton = document.querySelector('.add-button')
 addCityButton.addEventListener('click', addToFavorites)
+

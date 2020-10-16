@@ -19,6 +19,17 @@ ul{
     padding: 0;
     margin-top: 0;
 }
+.waiting{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+.refresh-icon{
+    width: 70px;
+    height: 70px;
+}
 .weather-here-header{
     display: flex;
     justify-content: flex-start;
@@ -51,18 +62,20 @@ ul{
 .weather-here-main{
     display: flex;
     justify-content: space-around;
-}/*
-.weather-here-icon{
-    width: 130px;
-    height: 130px;
-}*//*
-.weather-here-temperature{
-    font-size: 80pt;
-}*/
+    align-items: center;
+}
+.weather-here-city .icon-weather{
+    width: 100px;
+    height: 100px;
+}
+.weather-here-city .temperature{
+    font-size: 40pt;
+    font-weight: bold;
+}
 .weather-here-extra-data{
     width: calc(1/2 * 100% - (1 - 1/2) * 8%);
 }
-.extra-parameter{
+.wind-parameter, .cloud-parameter, .pressure-parameter, .humidity-parameter, .coordinates-parameter{
     display: flex;
     justify-content: space-between;
     background-color: white;
@@ -84,6 +97,7 @@ ul{
     align-items: center;
 }
 .add-city-input{
+    width: 100%;
     cursor: text;
     padding: 10px;
     background: rgb(255, 255, 255);
@@ -109,22 +123,29 @@ ul{
     flex-wrap: wrap;
     justify-content: space-between;
 }
-.temperature{
+.weather-city .icon-weather{
+    width: 60px;
+    height: 60px;
+}
+.weather-city .temperature{
     font-size: 20pt;
     font-weight: bold;
 }
-.favorites-city{
+.weather-city-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.weather-city{
+    display: flex;
+    flex-direction: column;
     width: calc(1/2 * 100% - (1 - 1/2) * 8%);
 }
 .favorites-main{
     display: flex;
     justify-content: space-between;
     align-items: center;
-}/*
-.favorites-icon-weather{
-    width: 60px;
-    height: 60px;
-}*/
+}
 .favorites-icon-delete{
     width: 50px;
     height: 50px;
@@ -138,11 +159,6 @@ ul{
     cursor: pointer;
     padding: 0;
 }
-/*
-.city-name{
-
-}*/
-
 @media only screen and (max-width: 1300px) and (min-width: 1001px) {
     .weather-here-update-button{
         margin-left: 18%;   
@@ -152,8 +168,12 @@ ul{
     body {
         font-size: 12pt;
     }
-    .temperature{
-        font-size: 16pt;
+    .weather-here-city .temperature{
+        font-size: 30pt;
+        font-weight: bold;
+    }
+    .weather-city .temperature{
+        font-size: 15pt;
     }
     h3{
         font-size: 15pt;
@@ -163,22 +183,11 @@ ul{
     }
     .weather-here-update-button{
         margin-left: 10%;   
-    }/*
-    .weather-here-icon{
-        width: 100px;
-        height: 100px;
-    }*//*
-    .weather-here-temperature{
-        font-size: 60pt;
-    }*/
+    }
     .add-city-icon{
         width: 40px;
         height: 40px;
-    }/*
-    .favorites-icon-weather{
-        width: 40px;
-        height: 40px;
-    }*/
+    }
     .favorites-icon-delete{
         width: 40px;
         height: 40px;
@@ -227,7 +236,7 @@ ul{
         width: 50px;
         height: 50px;
     }
-    .favorites-city{
+    .weather-city{
         width: 100%;
     }
 }
