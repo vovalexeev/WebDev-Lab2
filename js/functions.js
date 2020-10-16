@@ -80,13 +80,27 @@ const addToFavorites = async evt => {
     const searchInput = document.getElementById('add-city-input')
     const cityName = searchInput.value.trim()
     const response = await weatherAPI.getByCityName(cityName)
-    if (response.cod === 200) {
-        const favoritesList = JSON.parse(localStorage.getItem('favoritesList'))
-        localStorage.setItem('favoritesList', JSON.stringify([cityName, ...favoritesList]))
-        updateWeatherFavorites()
-    } else if (response.cod === '404')
-        alert(`${cityName} not found`)
-    searchInput.value = ''
+
+    var exist = false;
+
+    var list = JSON.parse(localStorage.getItem('favoritesList'));
+    for (var i = 0; i < list.length; i++)
+        if (list[i] == cityName) {
+            exist = true;
+            break;
+        }
+    if (!exist){
+        if (response.cod === 200) {
+                const favoritesList = JSON.parse(localStorage.getItem('favoritesList'))
+                localStorage.setItem('favoritesList', JSON.stringify([cityName, ...favoritesList]))
+                updateWeatherFavorites()
+        } 
+        else{
+            if (response.cod === '404')
+            alert(`${cityName} not found`)
+            searchInput.value = ''
+        } 
+    }
 }
 
 const updateWeatherFavorites = () => {

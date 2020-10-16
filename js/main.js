@@ -1,5 +1,5 @@
 const weatherAPI = new WeatherAPI()
-
+//localStorage.clear()
 const weatherHere = document.querySelector('.weather-here')
 const weatherCity = document.querySelector('.weather-city-list')
 if (!localStorage.getItem('favoritesList'))
