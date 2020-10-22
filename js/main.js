@@ -1,5 +1,5 @@
 const weatherAPI = new WeatherAPI()
-//localStorage.clear()
+
 const weatherHere = document.querySelector('.weather-here')
 const weatherCity = document.querySelector('.weather-city-list')
 if (!localStorage.getItem('favoritesList'))
@@ -14,6 +14,6 @@ for(let i = 0; i < updateButton.length; i++){
         updateButton[i].addEventListener('click', updateWeatherHere)
     }
 }	
-const addCityButton = document.querySelector('.add-button')
-addCityButton.addEventListener('click', addToFavorites)
-
+const addCityButton = document.querySelector('.add-city-form')
+addCityButton.addEventListener('submit', addToFavorites)
+window.addEventListener("offline", function(e) {alert("Internet disconnected... Please refresh the page!");})

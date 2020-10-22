@@ -6,7 +6,7 @@ const weatherHereWaiting = () => {
 const weatherCityWaiting = (cityName) => {
     const weatherCityWaitingTemplate = document.querySelector('template#weather-city-waiting')
     const newWeatherCityWaiting = document.importNode(weatherCityWaitingTemplate.content, true)
-    newWeatherCityWaiting.querySelector('.city-name').innerText = cityName
+    newWeatherCityWaiting.querySelector('.city-name').innerText = cityName.split('_').join(' ')
     newWeatherCityWaiting.firstElementChild.setAttribute('cityName', cityName)
     return newWeatherCityWaiting
 }
@@ -23,7 +23,7 @@ const weatherCityFunc = (weather) => {
     const newWeatherCity = document.importNode(weatherCityTemplate.content, true)
     setWeatherParameters(newWeatherCity, weather)
     newWeatherCity.querySelector('.delete-button').addEventListener('click', removeFromFavorites)
-    newWeatherCity.firstElementChild.setAttribute('cityName', weather.name)
+    newWeatherCity.firstElementChild.setAttribute('cityName', weather.name.split('_').join(' '))
     return newWeatherCity
 }
 
@@ -32,15 +32,24 @@ function updateWeatherHere () {
     const waitingCity = weatherHereWaiting()
     weatherHere.append(waitingCity)
     navigator.geolocation.getCurrentPosition (async coordinates => {
-            weatherAPI.getByCityCoordinates(coordinates)
-                .then(weather => {
-                    weatherHere.innerHTML = ""
-                    weatherHere.append(weatherHereFunc(weather))
-                })
-                .catch(() => alert('Something went wrong... Please refresh the page'))
-        },
-        positionError => console.log(positionError.message))
+        weatherAPI.getByCityCoordinates(coordinates)
+            .then(weather => {
+                weatherHere.innerHTML = ""
+                weatherHere.append(weatherHereFunc(weather))
+            })
+            .catch(() => {
+                 alert('Something went wrong... Please refresh the page!')
+            })
+    }, error => {
+        weatherAPI.getByCityName("Zelenogorsk")
+        .then(weather => {
+            weatherHere.innerHTML = ""
+            weatherHere.append(weatherHereFunc(weather))
+        })
+        .catch(() => alert('Something went wrong... Please refresh the page!'))
+    })
 }
+    
 
 const setWeatherParameters = (element, weatherObject) => {
     const {name, icon, temperature, wind, cloud, pressure, humidity, coordinates} = getWeatherParameters(element)
@@ -70,35 +79,46 @@ const getWeatherParameters = weatherCity => {
 
 const removeFromFavorites = evt => {
     const thisCityName = evt.currentTarget.parentElement.firstElementChild.innerHTML
-    const favoritesList = JSON.parse(localStorage.getItem('favoritesList'))
+    const favoritesList = JSON.parse(localStorage.getItem('favoritesList').split('_').join(' '))
     localStorage.setItem('favoritesList', JSON.stringify(favoritesList.filter(cityName => cityName !== thisCityName)))
-    updateWeatherFavorites()
+    let citiesElementToRemove = []
+    const favoritesList1 = JSON.parse(localStorage.getItem('favoritesList').split('_').join(' '))
+    for (const cityElement of weatherCity.children) {
+        const thisCityName = cityElement.querySelector('.city-name').innerText
+        if (!(favoritesList1.includes(thisCityName)))
+            citiesElementToRemove.push(cityElement)
+    }
+    citiesElementToRemove.forEach(cityElementToRemove => weatherCity.removeChild(cityElementToRemove))
 }
 
 const addToFavorites = async evt => {
     evt.preventDefault()
-    const searchInput = document.getElementById('add-city-input')
-    const cityName = searchInput.value.trim()
-    const response = await weatherAPI.getByCityName(cityName)
-
-    var exist = false;
-
-    var list = JSON.parse(localStorage.getItem('favoritesList'));
-    for (var i = 0; i < list.length; i++)
+    const cityName = evt.currentTarget.firstElementChild.value.split(' ').join('_');
+    evt.currentTarget.firstElementChild.value = ''
+    let exist = false;
+    const list = JSON.parse(localStorage.getItem('favoritesList'));
+    for (var i = 0; i < list.length; i++){
         if (list[i] == cityName) {
             exist = true;
+            alert('This city is already in favorites!')
             break;
         }
-    if (!exist){
+    }
+    if (exist === false){
+        weatherCity.append(weatherCityWaiting(cityName))
+        const response = await weatherAPI.getByCityName(cityName)
         if (response.cod === 200) {
-                const favoritesList = JSON.parse(localStorage.getItem('favoritesList'))
-                localStorage.setItem('favoritesList', JSON.stringify([cityName, ...favoritesList]))
-                updateWeatherFavorites()
+            const favoritesList = JSON.parse(localStorage.getItem('favoritesList'))
+            localStorage.setItem('favoritesList', JSON.stringify([cityName, ...favoritesList]))
+            const loading = weatherCity.querySelector(`.weather-city[cityName=${cityName}]`)
+            weatherCity.replaceChild(weatherCityFunc(response), loading)
         } 
         else{
-            if (response.cod === '404')
-            alert(`${cityName} not found`)
-            searchInput.value = ''
+            if (response.cod === '404'){
+                alert(`${cityName} not found!`)
+                const loading = weatherCity.querySelector(`.weather-city[cityName=${cityName}]`)
+                weatherCity.removeChild(loading)
+            } 
         } 
     }
 }
@@ -111,18 +131,12 @@ const updateWeatherFavorites = () => {
         if (!weatherCity.querySelector(`.weather-city[cityName=${cityName}]`))
             citiesToAdd.push(cityName)
     }
-    for (const cityElement of weatherCity.children) {
-        const thisCityName = cityElement.querySelector('.city-name').innerText
-        if (!(favoritesList.includes(thisCityName)))
-            citiesElementToRemove.push(cityElement)
-    }
-    citiesElementToRemove.forEach(cityElementToRemove => weatherCity.removeChild(cityElementToRemove))
     citiesToAdd.forEach(cityToAdd => {
         weatherCity.append(weatherCityWaiting(cityToAdd))
         const newCityElement = weatherCity.querySelector(`.weather-city[cityName=${cityToAdd}]`)
         weatherAPI.getByCityName(cityToAdd)
             .then(weather => 
                 weatherCity.replaceChild(weatherCityFunc(weather), newCityElement))
-            .catch(() => alert('Something went wrong... Please refresh the page'))
+            .catch(() => alert('Something went wrong... Please refresh the page!'))
     })
 };
